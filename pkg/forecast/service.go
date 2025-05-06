@@ -20,6 +20,7 @@ func SimpleRequest(latitude float64, longitude float64, client *http.Client, w h
 	newUrl := pointResponse.Properties.Forecast
 
 	log.Debug().Msgf("Making GET request at the following address: %s", newUrl)
+	log.Info().Msg("Making GET request to NWS gridpoints endpoint")
 	res, err := client.Get(newUrl)
 	if err != nil {
 		return nil, err
@@ -40,6 +41,7 @@ func SimpleRequest(latitude float64, longitude float64, client *http.Client, w h
 	return w, nil
 }
 
+// Handles the logic for the Detailed Report endpoint
 func DetailedRequest(latitude float64, longitude float64, client *http.Client, w http.ResponseWriter) (http.ResponseWriter, error){
 	var observationResponse models.ObservationResponse
 	pointResponse, err := initialRequest(latitude, longitude, client)
@@ -48,6 +50,7 @@ func DetailedRequest(latitude float64, longitude float64, client *http.Client, w
 	}
 	newUrl := fmt.Sprintf("%s/observations", pointResponse.Properties.ForecastZone)
 	log.Debug().Msgf("Making GET request at the following address: %s", newUrl)
+	log.Info().Msg("Making GET request to NWS /zones/forecast endpoint")
 
 	res, err := client.Get(newUrl)
 	if err != nil {
@@ -81,10 +84,13 @@ func DetailedRequest(latitude float64, longitude float64, client *http.Client, w
 	return w, nil
 }
 
+// Since both of the endpoints require this initial API call, I decided to isolate it into a seperate function
+// This call is necessary as it returns the subsequent GET request we need to make to get our data
 func initialRequest(latitude float64, longitude float64, client *http.Client) (models.PointResponse, error){
 	var pointResponse models.PointResponse
 	url := fmt.Sprintf("https://api.weather.gov/points/%f,%f", latitude, longitude)
 	log.Debug().Msgf("Making GET request at the following address: %s", url)
+	log.Info().Msg("Making initial request to NWS")
 	resp, err := client.Get(url)
 	if err != nil {
 		return pointResponse, err
@@ -106,6 +112,7 @@ func returnHandler(w http.ResponseWriter, x interface{}) http.ResponseWriter{
 	return w
 }
 
+// Isolates the mapping of the temperatures and the TLDR
 func applyLogic(forecast models.ForecastResponse) (string) {
 	temp := forecast.Properties.Periods[0].Temperature
 	log.Debug().Msgf("Temperature: %v", temp)

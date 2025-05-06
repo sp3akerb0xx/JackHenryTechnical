@@ -41,6 +41,7 @@ func StartApi(){
 
 // SimpleForecast returns the response that was requested as a part of this interview 
 func getSimpleForecast(w http.ResponseWriter, r *http.Request) {
+	log.Info().Msg("Retrieving Simple Forecast")
 	vars := mux.Vars(r)
 
 	latitude, err := strconv.ParseFloat(vars["latitude"], 32)
@@ -62,6 +63,7 @@ func getSimpleForecast(w http.ResponseWriter, r *http.Request) {
 // DetailedForecast returns some more technical weather metrics from a different NWS endpoint
 // You can ask me why I chose to do this if you want. There's a bit of a story behind it...
 func getDetailedForecast(w http.ResponseWriter, r *http.Request){
+	log.Info().Msg("Retrieving Detailed Forecast")
 	vars := mux.Vars(r)
 
 	latitude, err := strconv.ParseFloat(vars["latitude"], 32)

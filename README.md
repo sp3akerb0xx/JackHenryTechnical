@@ -1,8 +1,8 @@
-Nitin Chennam's Weather API
+# Nitin Chennam's Weather API
 
 ## Startup
 - In order to run this project, you will need to be on `go v1.24.x`. 
-- Once you have confirmed that you are running the correct version of go, then you can run the startup script provided by running `./run.sh` in your terminal
+- Once you have confirmed that you are running the correct version of go, you can run the startup script provided by running `./run.sh` in your terminal
 
 ## Available Endpoints
 - This API has 3 exposed endpoints
